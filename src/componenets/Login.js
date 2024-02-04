@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../slices/authSlice';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function SignUp() {
+function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [values, setValues] = useState({
     email: '',
     pass: '',
-    conf: '',
   });
 
   const handleSubmission = async (e) => {
     e.preventDefault();
 
-    if (values.pass !== values.conf) {
-      alert('Please enter matching passwords');
-      return;
-    }
-
     try {
       const userCredential = await fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCz5GQw9rpsQ_WeKR1Qj0-CkRUvQUEmogI',
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCz5GQw9rpsQ_WeKR1Qj0-CkRUvQUEmogI',
         {
           method: 'POST',
           body: JSON.stringify({
@@ -30,24 +27,28 @@ function SignUp() {
           }),
           headers: { 'Content-Type': 'application/json' },
         }
-      ).then((response) => response.json());
+      );
 
-      if (userCredential) {
-        console.log('User signed up:', userCredential);
+      if (userCredential.ok) {
+        const userData = await userCredential.json();
+        console.log('User logged in:', userData);
 
-        // Use navigate instead of history.push
-        navigate('/login');
+        // Dispatch the loginSuccess action to update the Redux state
+        dispatch(loginSuccess({ token: userData.idToken, user: userData.email }));
 
+        navigate('/welcome');
         setValues({
           email: '',
           pass: '',
-          conf: '',
         });
       } else {
-        console.log('Error signing up.');
+        const errorData = await userCredential.json();
+        console.log('Error logging in:', errorData);
+        
+        alert('Incorrect email or password. Please try again.');
       }
     } catch (error) {
-      console.log('Error signing up:', error.message);
+      console.log('Error logging in:', error.message);
     }
   };
 
@@ -57,7 +58,7 @@ function SignUp() {
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
-      minHeight: '100vh', // Set minimum height to cover the entire viewport
+      minHeight: '100vh',
       margin: 0,
       display: 'flex',
       alignItems: 'center',
@@ -68,7 +69,7 @@ function SignUp() {
           <div className="col-md-6 offset-md-3">
             <div className="card">
               <div className="card-header">
-                <h2 className="text-center">SignUp</h2>
+                <h2 className="text-center">Login In</h2>
               </div>
               <div className="card-body">
                 <div className="mb-3">
@@ -89,34 +90,23 @@ function SignUp() {
                   <input
                     type="password"
                     className="form-control"
-                    placeholder="Create Your Password"
+                    placeholder="Enter Your Password"
                     value={values.pass}
                     onChange={(event) =>
                       setValues((prev) => ({ ...prev, pass: event.target.value }))
                     }
                   />
                 </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Confirm Password:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Confirm your password"
-                    value={values.conf}
-                    onChange={(event) =>
-                      setValues((prev) => ({ ...prev, conf: event.target.value }))
-                    }
-                  />
-                </div>
-
                 <div>
                   <button className="btn btn-primary" onClick={handleSubmission}>
-                    Sign Up
+                    Login
                   </button>
                   <p className="mt-3 text-center">Already have an account?</p>
                   <p className="text-center">
-                    <Link to="/login">Login</Link>
+                    <Link to="/signup">Signup</Link>
+                  </p>
+                  <p className="text-center">
+                    <Link to="/password">Forget Password</Link>
                   </p>
                 </div>
               </div>
@@ -128,4 +118,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Login;
