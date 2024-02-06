@@ -36,7 +36,7 @@ function Login() {
         // Dispatch the loginSuccess action to update the Redux state
         dispatch(loginSuccess({ token: userData.idToken, user: userData.email }));
 
-        navigate('/welcome');
+        navigate('/compose');
         setValues({
           email: '',
           pass: '',
@@ -103,7 +103,7 @@ function Login() {
                   </button>
                   <p className="mt-3 text-center">Already have an account?</p>
                   <p className="text-center">
-                    <Link to="/signup">Signup</Link>
+                    <Link to="/">Signup</Link>
                   </p>
                   <p className="text-center">
                     <Link to="/password">Forget Password</Link>

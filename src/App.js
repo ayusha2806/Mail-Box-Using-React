@@ -3,7 +3,7 @@ import { BrowserRouter as Router,Routes,Route } from "react-router-dom";
 import SignUp from "./componenets/SignUp";
 import Login from "./componenets/Login";
 import Password from "./componenets/Password";
-import Welcome from "./componenets/Welcome";
+import ComposeEmail from "./componenets/ComposeEmail";
 
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/password" element={<Password/>} />
-        <Route path="/welcome" element={<Welcome/>} />
+        <Route path="/compose" element={<ComposeEmail />} />
       </Routes>
     </Router>
   );
