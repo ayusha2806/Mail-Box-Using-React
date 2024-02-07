@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectReceivedMail, setReceivedMail } from "../slices/emailSlice";
 import { selectUser } from "../slices/authSlice";
 import { logout } from "../slices/authSlice";
+import useFetchEmails from "./Hooks/UserFetch";
 
 const Inbox = () => {
     const userId = useSelector(selectUser)
@@ -15,36 +16,49 @@ const Inbox = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchEmails = async () => {
-            try {
-                const response = await axios.get(`https://react-https-45286-default-rtdb.firebaseio.com/mail/${userId}/Receive.json`);
-                console.log("Response:", response); // Log the response to see its structure
-                if (response.status === 200) {
-                    const data = response.data;
-                    console.log("Data:", data); // Log the data to see its content
-                    if (data) {
-                        const emailsArray = Object.entries(data).map(([id, email]) => ({ id, ...email }));
-                        console.log("Emails Array:", emailsArray); // Log the emailsArray to see its contents
-                        dispatch(setReceivedMail(emailsArray));
-                        const unread = emailsArray.filter(email => !email.read);
-                        setUnreadCount(unread.length);
-                    } else {
-                        console.error("No emails found.");
-                    }
-                } else {
-                    throw new Error('Failed to fetch emails');
-                }
-            } catch (error) {
-                console.error("Error fetching emails:", error);
-                // Handle error gracefully, show a message to the user
-            }
-        };
-        fetchEmails();
-        const intervalId = setInterval(fetchEmails, 2000); 
-        return () => clearInterval(intervalId); 
+    // useEffect(() => {
+    //     const fetchEmails = async () => {
+    //         try {
+    //             const response = await axios.get(`https://react-https-45286-default-rtdb.firebaseio.com/mail/${userId}/Receive.json`);
+    //             console.log("Response:", response); // Log the response to see its structure
+    //             if (response.status === 200) {
+    //                 const data = response.data;
+    //                 console.log("Data:", data); // Log the data to see its content
+    //                 if (data) {
+    //                     const emailsArray = Object.entries(data).map(([id, email]) => ({ id, ...email }));
+    //                     console.log("Emails Array:", emailsArray); // Log the emailsArray to see its contents
+    //                     dispatch(setReceivedMail(emailsArray));
+    //                     const unread = emailsArray.filter(email => !email.read);
+    //                     setUnreadCount(unread.length);
+    //                 } else {
+    //                     console.error("No emails found.");
+    //                 }
+    //             } else {
+    //                 throw new Error('Failed to fetch emails');
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching emails:", error);
+    //             // Handle error gracefully, show a message to the user
+    //         }
+    //     };
+    //     fetchEmails();
+    //     const intervalId = setInterval(fetchEmails, 2000); 
+    //     return () => clearInterval(intervalId); 
         
-    }, [dispatch, userId]);
+    // }, [dispatch, userId]);
+
+
+    useFetchEmails(
+      userId,
+      `https://react-https-45286-default-rtdb.firebaseio.com/mail/${userId}/Receive.json`,
+      setReceivedMail
+  )
+
+  useEffect(() => {
+    const unread = receivedMail.filter(email => !email.read);
+    setUnreadCount(unread.length);
+}, [receivedMail]);
+
 
     const composeHandler = () => {
         navigate('/compose');

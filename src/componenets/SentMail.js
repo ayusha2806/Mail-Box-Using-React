@@ -5,7 +5,7 @@ import "./Inbox.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setSendMail } from "../slices/emailSlice";
 import { selectUser } from "../slices/authSlice";
-// import useFetchEmails from "./Hooks/UserFetch";
+import useFetchEmails from "./Hooks/UserFetch";
 
 const SentMail = () => {
     // const mail = useSelector((state)=>state.mail.mail)|| [];
@@ -17,36 +17,36 @@ const SentMail = () => {
     const navigate = useNavigate();
 
 
-    // useFetchEmails(
-    //     userId,
-    //     `https://expense-tracker-e0688-default-rtdb.firebaseio.com/user/${userId}/mails/sended.json`,
-    //     setMail
-    // );
+    useFetchEmails(
+        userId,
+        `https://react-https-45286-default-rtdb.firebaseio.com/mail/${userId}/Send.json`,
+        setSendMail
+    );
 
 
-    useEffect(() => {
-        const fetchEmails = async () => {
-            try {
-                const response = await axios.get(`https://react-https-45286-default-rtdb.firebaseio.com/mail/${userId}/Send.json`);
+    // useEffect(() => {
+    //     const fetchEmails = async () => {
+    //         try {
+    //             const response = await axios.get(`https://react-https-45286-default-rtdb.firebaseio.com/mail/${userId}/Send.json`);
                 
-                if(response.status===200){
-                    const data= response.data;
-                    if(data){
-                const data = response.data;
-                    const emailsArray = Object.entries(data).map(([id, email]) => ({ id, ...email }));
-                    dispatch(setSendMail(emailsArray));
+    //             if(response.status===200){
+    //                 const data= response.data;
+    //                 if(data){
+    //             const data = response.data;
+    //                 const emailsArray = Object.entries(data).map(([id, email]) => ({ id, ...email }));
+    //                 dispatch(setSendMail(emailsArray));
 
-                }
-            }
+    //             }
+    //         }
 
-            } catch (error) {
-                console.error("Error fetching emails:", error);
-            }
-        };
+    //         } catch (error) {
+    //             console.error("Error fetching emails:", error);
+    //         }
+    //     };
 
-        fetchEmails();
+    //     fetchEmails();
 
-    }, [dispatch,userId]);
+    // }, [dispatch,userId]);
 
 
     const composeHandler = () => {
