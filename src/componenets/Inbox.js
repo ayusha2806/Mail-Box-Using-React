@@ -41,6 +41,8 @@ const Inbox = () => {
             }
         };
         fetchEmails();
+        const intervalId = setInterval(fetchEmails, 2000); 
+        return () => clearInterval(intervalId); 
         
     }, [dispatch, userId]);
 
