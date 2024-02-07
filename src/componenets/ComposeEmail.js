@@ -25,7 +25,7 @@ function ComposeEmail() {
     const content = JSON.stringify(rawContentState);
 
     const receiver = recipient.replace(/[^a-zA-Z0-9]/g, "");
-    dispatch(loginSuccess({ receiver }));
+    // dispatch(loginSuccess({ receiver }));
 
     const emailContent = {
       recipient: recipient,

@@ -27,7 +27,7 @@ const Inbox = () => {
                         const emailsArray = Object.entries(data).map(([id, email]) => ({ id, ...email }));
                         console.log("Emails Array:", emailsArray); // Log the emailsArray to see its contents
                         dispatch(setReceivedMail(emailsArray));
-                        const unread = receivedMail.filter(email => !email.read);
+                        const unread = emailsArray.filter(email => !email.read);
                         setUnreadCount(unread.length);
                     } else {
                         console.error("No emails found.");
