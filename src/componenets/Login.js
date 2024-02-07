@@ -35,7 +35,7 @@ function Login() {
   
         // Generate userId from email address
         const userId = userData.email.replace(/[^a-zA-Z0-9]/g, "");
-  
+        console.log(userId,userData.idToken);
         // Dispatch the loginSuccess action with token, user, email, and userId data
         dispatch(
           loginSuccess({
