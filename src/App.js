@@ -4,6 +4,7 @@ import SignUp from "./componenets/SignUp";
 import Login from "./componenets/Login";
 import Password from "./componenets/Password";
 import ComposeEmail from "./componenets/ComposeEmail";
+import Inbox from "./componenets/Inbox"; 
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/password" element={<Password/>} />
         <Route path="/compose" element={<ComposeEmail />} />
+        <Route path="/inbox" element={<Inbox />} />
       </Routes>
     </Router>
   );

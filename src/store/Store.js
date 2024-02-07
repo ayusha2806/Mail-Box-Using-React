@@ -1,6 +1,6 @@
 // store.js
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../slices/authSlice';
+import authReducer, { selectUser } from '../slices/authSlice'; // Import the auth reducer and selectUser selector
 import emailReducer from '../slices/emailSlice'; // Import the emailSlice
 
 const store = configureStore({
@@ -11,3 +11,4 @@ const store = configureStore({
 });
 
 export default store;
+export { selectUser }; // Export the selectUser selector

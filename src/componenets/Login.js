@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const userCredential = await fetch(
+      const response = await fetch(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCz5GQw9rpsQ_WeKR1Qj0-CkRUvQUEmogI',
         {
           method: 'POST',
@@ -28,21 +28,29 @@ function Login() {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-
-      if (userCredential.ok) {
-        const userData = await userCredential.json();
+  
+      if (response.ok) {
+        const userData = await response.json();
         console.log('User logged in:', userData);
-
-        // Dispatch the loginSuccess action to update the Redux state
-        dispatch(loginSuccess({ token: userData.idToken, user: userData.email }));
-
+  
+        // Generate userId from email address
+        const userId = userData.email.replace(/[^a-zA-Z0-9]/g, "");
+  
+        // Dispatch the loginSuccess action with token, user, email, and userId data
+        dispatch(
+          loginSuccess({
+            token: userData.idToken,
+            user: userId,
+          })
+        );
+  
         navigate('/compose');
         setValues({
           email: '',
           pass: '',
         });
       } else {
-        const errorData = await userCredential.json();
+        const errorData = await response.json();
         console.log('Error logging in:', errorData);
         
         alert('Incorrect email or password. Please try again.');
